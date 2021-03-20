@@ -35,11 +35,14 @@ def get_domain_with_scheme(url):
 def find_rss_link_home_page(url):
     result = []
     res = requests.get(url)
-    soup = Soup(res.text, 'html.parser')
-    all_a = soup.find_all('a')
-    for a in all_a:
-        if 'rss' in str(a).lower():
-            result.append(urljoin(url, a['href']))
+    if res.status_code != 200:
+        print('Cant connect to this websites homepage')
+    else:
+        soup = Soup(res.text, 'html.parser')
+        all_a = soup.find_all('a')
+        for a in all_a:
+            if 'rss' in str(a).lower():
+                result.append(urljoin(url, a['href']))
     return result
 
 
@@ -58,10 +61,13 @@ def find_rss_in_page(url, domain):
 def find_rss_with_feed_search(url):
     result = []
     res = requests.get(FEED_SEARCH_API + url)
-    json_res = json.loads(res.text)
-    for item in json_res:
-        rss_url = item['url']
-        result.append(rss_url)
+    if res.status_code != 200:
+        print('Feed search cant connect to this website')
+    else:
+        json_res = json.loads(res.text)
+        for item in json_res:
+            rss_url = item['url']
+            result.append(rss_url)
     return result
 
 

@@ -30,7 +30,7 @@ if __name__ == '__main__':
     with open(PROPERTIES_FILE) as f:
         properties_records = json.load(f)
 
-    for domain in domain_list[1:]:
+    for domain in domain_list:
         # Comment statement below to parse all websites
         if domain in properties_records:
             continue
